@@ -13,7 +13,7 @@ License: [MIT](license.md "Смотреть лицензию")
 * PHP
 * CSS
 * HTML
-* JS
+
 
 ## Данные для авторизации
 
