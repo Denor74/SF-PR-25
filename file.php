@@ -24,7 +24,7 @@ if (!empty($_POST['comment'])) {
         //var_dump($comment);
         $comment = strip_tags($comment);
         //$comment = str_replace(array(["\r\n","\r","\n","\\r","\\n","\\r\\n"]),"<br/>",$comment);
-        $comment = date('d.m.y H:i') . ': ' . $comment;
+        $comment = date('d.m.y H:i') . ': ' . '(' . $_SESSION['auth'] . ') ' . $comment;
 
         // Дописываем текст в файл (будет создан, если еще не существует)
         file_put_contents($commentFilePath,  $comment . "\n", FILE_APPEND);
@@ -57,6 +57,7 @@ $comments = file_exists($commentFilePath)
 <body>
 
     <?php require_once 'add/header.php'; ?>
+    <main>
     <div class="container pt-4">
 
         <h1 class="mb-4"><a href="<?php echo URL; ?>">Галерея изображений</a></h1>
@@ -87,6 +88,7 @@ $comments = file_exists($commentFilePath)
                 <?php endif; ?>
 
                 <!-- Форма добавления комментария -->
+                <?php if (!empty($_SESSION['auth'])): ?>
                 <form method="post">
                     <div class="form-group">
                         <label for="comment">Ваш комментарий</label>
@@ -95,11 +97,12 @@ $comments = file_exists($commentFilePath)
                     <hr>
                     <button type="submit" class="btn btn-primary">Отправить</button>
                 </form>
+                <?php endif; ?>
             </div>
         </div><!-- /.row -->
 
     </div><!-- /.container -->
-
+    </main>
     <?php include 'add/footer.phtml'; ?>
 </body>
 

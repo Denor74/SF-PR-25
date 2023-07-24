@@ -1,5 +1,8 @@
 <?php
 require 'config.php';
+
+// $pass = md5('123');
+// echo $pass;
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,7 +20,7 @@ require 'config.php';
 
 <body>
     <?php require_once 'add/header.php'; ?>
-    <main>
+    <main class="main_css">
         <div class="container pt-4">
             <h1 class="mb-4"><a href="<?php echo URL; ?>">Галерея изображений</a></h1>
 
@@ -39,12 +42,16 @@ require 'config.php';
                         <?php foreach ($files as $file) : ?>
 
                             <div class="col-12 col-sm-3 mb-4">
-                                <form method="post">
-                                    <input type="hidden" name="name" value="<?php echo $file; ?>">
-                                    <button type="submit" class="close" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </form>
+
+                                <!-- Кнопка удаления файла и комментариев-->
+                                <?php if (!empty($_SESSION['auth'])) : ?>
+                                    <form method="post">
+                                        <input type="hidden" name="name" value="<?php echo $file; ?>">
+                                        <button type="submit" class="close" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                                 <a href="<?php echo URL . '/file.php?name=' . $file; ?>" title="Просмотр полного изображения">
                                     <img src="<?php echo URL . '/' . UPLOAD_DIR . '/' . $file ?>" class="img-thumbnail" alt="<?php echo $file; ?>">
                                 </a>
@@ -59,18 +66,21 @@ require 'config.php';
 
 
             <!-- Форма загрузки файлов -->
-            <form method="post" enctype="multipart/form-data">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" name="files[]" id="customFile" multiple required>
-                    <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выберите файлы</label>
-                    <small class="form-text text-muted">
-                        Максимальный размер файла: <?php echo UPLOAD_MAX_SIZE / 1000000; ?>Мб.
-                        Допустимые форматы: <?php echo implode(', ', ALLOWED_TYPES) ?>.
-                    </small>
-                </div>
-                <hr>
-                <button type="submit" class="btn btn-primary">Загрузить</button>
-            </form>
+
+            <?php if (!empty($files)) : ?>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="files[]" id="customFile" multiple required>
+                        <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выберите файлы</label>
+                        <small class="form-text text-muted">
+                            Максимальный размер файла: <?php echo UPLOAD_MAX_SIZE / 1000000; ?>Мб.
+                            Допустимые форматы: <?php echo implode(', ', ALLOWED_TYPES) ?>.
+                        </small>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Загрузить</button>
+                </form>
+            <?php endif; ?>
         </div><!-- /.container -->
     </main>
     <?php include 'add/footer.phtml'; ?>
